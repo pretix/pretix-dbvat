@@ -102,9 +102,7 @@ def badges_logentry_display(sender, logentry, **kwargs):
         "pretix_dbvat.coupon.deleted": _("DB VAT eCoupon deleted."),
         "pretix_dbvat.coupon.added": _("DB VAT eCoupon created."),
         "pretix_dbvat.coupon.changed": _("DB VAT eCoupon changed."),
-        "pretix_dbvat.assignment.failed": _(
-            "Failed to assign an DB VAT eCoupon."
-        ),
+        "pretix_dbvat.assignment.failed": _("Failed to assign an DB VAT eCoupon."),
     }
 
     if logentry.action_type in plains:
@@ -116,9 +114,9 @@ def badges_logentry_display(sender, logentry, **kwargs):
 def order_placed_receiver(sender, order, **kwargs):
     if sender.settings.dbvat_issue_when == "order_placed":
         if (
-            (sender.settings.dbvat_issue_when == "on_demand" and order.meta_info_data.get("dbvat_requested", False))
-            or sender.settings.dbvat_issue_when == "always"
-        ):
+            sender.settings.dbvat_issue_when == "on_demand"
+            and order.meta_info_data.get("dbvat_requested", False)
+        ) or sender.settings.dbvat_issue_when == "always":
             assign_coupons(sender, order, **kwargs)
 
 
@@ -127,9 +125,9 @@ def order_placed_receiver(sender, order, **kwargs):
 def order_paid_receiver(sender, order, **kwargs):
     print(order.meta_info_data)
     if (
-        (sender.settings.dbvat_issue_when == "on_demand" and order.meta_info_data.get("dbvat_requested", False))
-        or sender.settings.dbvat_issue_when == "always"
-    ):
+        sender.settings.dbvat_issue_when == "on_demand"
+        and order.meta_info_data.get("dbvat_requested", False)
+    ) or sender.settings.dbvat_issue_when == "always":
         assign_coupons(sender, order, **kwargs)
 
 
@@ -155,11 +153,14 @@ def recv_layout_text_variables(sender, request=None, **kwargs):
         d = {
             c.used_by_id: c
             for c in DBVATCoupon.objects.filter(
-                used_by__in=[op.pk for op in ops] + [op.addon_to_id for op in ops if op.addon_to_id]
+                used_by__in=[op.pk for op in ops]
+                + [op.addon_to_id for op in ops if op.addon_to_id]
             )
         }
         return [
-            d[op.pk].secret if op.pk in d else (d[op.addon_to_id].secret if op.addon_to_id in d else "")
+            d[op.pk].secret
+            if op.pk in d
+            else (d[op.addon_to_id].secret if op.addon_to_id in d else "")
             for op in ops
         ]
 
@@ -193,11 +194,11 @@ def order_info(sender: Event, order: Order, request, **kwargs):
     if not DBVATCoupon.objects.filter(used_by__in=order.positions.all()).exists():
         return ""
 
-    template = get_template('pretix_dbvat/order_position_info.html')
+    template = get_template("pretix_dbvat/order_position_info.html")
     ctx = {
-        'order': order,
-        'positions': order.positions.all(),
-        'event': sender,
+        "order": order,
+        "positions": order.positions.all(),
+        "event": sender,
     }
     return template.render(ctx, request)
 
@@ -210,18 +211,18 @@ def position_info(sender: Event, order: Order, position, request, **kwargs):
     if not position.dbvat_coupons.exists():
         return ""
 
-    template = get_template('pretix_dbvat/order_position_info.html')
+    template = get_template("pretix_dbvat/order_position_info.html")
     ctx = {
-        'order': order,
-        'positions': [position],
-        'event': sender,
+        "order": order,
+        "positions": [position],
+        "event": sender,
     }
     return template.render(ctx, request)
 
 
 @receiver(html_head, dispatch_uid="dbvat_html_head")
 def html_head_presale(sender, request=None, **kwargs):
-    template = get_template('pretix_dbvat/presale_head.html')
+    template = get_template("pretix_dbvat/presale_head.html")
     return template.render({})
 
 
@@ -229,10 +230,12 @@ def html_head_presale(sender, request=None, **kwargs):
 def footer_link(sender, request=None, **kwargs):
     v = []
     if sender.settings.dbvat_add_infopage_link:
-        v.append({
-            'label': _('DB Event Discount'),
-            'url': eventreverse(sender, 'plugins:pretix_dbvat:terms')
-        })
+        v.append(
+            {
+                "label": _("DB Event Discount"),
+                "url": eventreverse(sender, "plugins:pretix_dbvat:terms"),
+            }
+        )
     return v
 
 

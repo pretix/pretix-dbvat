@@ -32,5 +32,5 @@ urlpatterns = [
 ]
 
 event_patterns = [
-    path('dbvat/', TermsView.as_view(), name='terms'),
+    path("dbvat/", TermsView.as_view(), name="terms"),
 ]

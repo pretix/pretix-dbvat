@@ -19,7 +19,13 @@ from .models import DBVATCoupon
 logger = logging.getLogger(__name__)
 
 
-class CouponListView(EventSettingsViewMixin, EventSettingsFormView, PaginationMixin, EventPermissionRequiredMixin, ListView):
+class CouponListView(
+    EventSettingsViewMixin,
+    EventSettingsFormView,
+    PaginationMixin,
+    EventPermissionRequiredMixin,
+    ListView,
+):
     model = DBVATCoupon
     context_object_name = "coupons"
     form_class = SettingsForm
@@ -192,11 +198,11 @@ class CouponBulkCreate(EventPermissionRequiredMixin, CreateView):
 
 
 class TermsView(TemplateView):
-    template_name = 'pretix_dbvat/terms.html'
+    template_name = "pretix_dbvat/terms.html"
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['event'] = self.request.event
-        ctx['accept_language'] = self.request.headers.get('Accept-Language', '')
+        ctx["event"] = self.request.event
+        ctx["accept_language"] = self.request.headers.get("Accept-Language", "")
 
         return ctx

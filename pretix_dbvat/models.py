@@ -66,6 +66,6 @@ class ItemProduct(models.Model):
         on_delete=models.CASCADE,
     )
     issue_coupons = models.BooleanField(
-        verbose_name=_('Issue DB VAT eCoupons if this product is purchased'),
+        verbose_name=_("Issue DB VAT eCoupons if this product is purchased"),
         default=False,
     )

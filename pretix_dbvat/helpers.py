@@ -16,14 +16,11 @@ def assign_coupons(event: Event, order: Order, **kwargs):
             item__dbvat_coupons_item__issue_coupons__isnull=False,
             dbvat_coupons__isnull=True,
             item__dbvat_coupons_item__issue_coupons=True,
-        )
-        .select_related("item", "item__dbvat_coupons_item")
+        ).select_related("item", "item__dbvat_coupons_item")
     )
     if not positions:
         return
-    cntr = Counter(
-        p.subevent_id for p in positions
-    )
+    cntr = Counter(p.subevent_id for p in positions)
     coupons = defaultdict(list)
 
     for subevent_id, cnt in cntr.items():
@@ -38,7 +35,9 @@ def assign_coupons(event: Event, order: Order, **kwargs):
                 Q(subevent__isnull=True) | Q(subevent_id=subevent_id),
                 event=event,
                 used=False,
-            )[:cnt]
+            )[
+                :cnt
+            ]
         )
         if len(found) < cnt:
             order.log_action(

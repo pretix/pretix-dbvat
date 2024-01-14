@@ -25,9 +25,7 @@ class SettingsForm(SettingsForm):
 
     dbvat_discount = forms.IntegerField(
         label=_("Discount amount"),
-        widget=forms.NumberInput(
-            attrs={'addon_after': '%'}
-        ),
+        widget=forms.NumberInput(attrs={"addon_after": "%"}),
     )
 
     dbvat_issue_on = forms.ChoiceField(
@@ -62,18 +60,24 @@ class SettingsForm(SettingsForm):
 
     dbvat_provide_pdfvars = forms.BooleanField(
         label=_("Provide eCoupons as PDF-ticket variables"),
-        help_text=_("If using the ticket PDF to communicate the eCoupons to your customers, consider always issuing "
-                    "the eCoupons to avoid empty fields. Please make sure to also provide all required information "
-                    "in the PDF. Be aware though, that eCoupons will not be represented in passbook tickets."),
+        help_text=_(
+            "If using the ticket PDF to communicate the eCoupons to your customers, consider always issuing "
+            "the eCoupons to avoid empty fields. Please make sure to also provide all required information "
+            "in the PDF. Be aware though, that eCoupons will not be represented in passbook tickets."
+        ),
         required=False,
         initial=True,
         disabled=True,
     )
 
     dbvat_add_infopage_link = forms.BooleanField(
-        label=_("Add link to information and Terms & Conditions page to the shops footer"),
-        help_text=_("Even if this option is disabled, it will still be accessible, as it is linked from the "
-                    "E-Mail as well as the information-box."),
+        label=_(
+            "Add link to information and Terms & Conditions page to the shops footer"
+        ),
+        help_text=_(
+            "Even if this option is disabled, it will still be accessible, as it is linked from the "
+            "E-Mail as well as the information-box."
+        ),
         required=False,
         initial=True,
     )

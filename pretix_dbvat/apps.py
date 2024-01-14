@@ -16,9 +16,11 @@ class PluginApp(PluginConfig):
     class PretixPluginMeta:
         name = gettext_lazy("DB Event Discount")
         author = "Martin Gross"
-        description = gettext_lazy("Distribute Deutsche Bahn Veranstaltungsrabatt (DB VAT) eCoupons to your attendees")
+        description = gettext_lazy(
+            "Distribute Deutsche Bahn Veranstaltungsrabatt (DB VAT) eCoupons to your attendees"
+        )
         visible = True
-        picture = 'pretix_dbvat/db-logo.svg'
+        picture = "pretix_dbvat/db-logo.svg"
         version = __version__
         category = "INTEGRATION"
         compatibility = "pretix>=4.14.0"
