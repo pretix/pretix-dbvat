@@ -18,7 +18,7 @@ class SettingsForm(SettingsForm):
         label=_("eCoupon source"),
         choices=(
             ("list", _("List")),
-            ("api", _("API")),
+            # ("api", _("API")),  # Not implemented yet
         ),
         initial="list",
     )
