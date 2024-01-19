@@ -35,6 +35,12 @@
                     to request your participation.
                 {% endblocktrans %}
             </p>
+            <p>
+                {% blocktrans trimmed %}
+                	Please remember, that you'll need to mark products that are eligible to receive eCoupons explicitly
+                    by activating the corresponding checkbox within the product's "Additional Settings"-tab.
+                {% endblocktrans %}
+            </p>
             <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
                 {% bootstrap_form_errors form %}
                 {% csrf_token %}

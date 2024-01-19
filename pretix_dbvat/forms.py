@@ -35,6 +35,8 @@ class SettingsForm(SettingsForm):
             ("order_paid", _("when order is marked as paid")),
         ),
         initial="order_placed",
+        help_text=_("It is recommended to only issue eCoupons to orders once they are paid to limit the potential for "
+                    "misuse (placing orders to harvest eCoupons without the intent to ever pay to the tickets).")
     )
 
 

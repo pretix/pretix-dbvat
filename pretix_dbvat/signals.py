@@ -100,13 +100,15 @@ def badges_logentry_display(sender, logentry, **kwargs):
 @receiver(signal=order_placed, dispatch_uid="dbvat_order_placed")
 @transaction.atomic()
 def order_placed_receiver(sender, order, **kwargs):
-    assign_coupons(sender, order, **kwargs)
+    if sender.settings.dbvat_issue_on == "order_placed":
+        assign_coupons(sender, order, **kwargs)
 
 
 @receiver(signal=order_paid, dispatch_uid="dbvat_order_paid")
 @transaction.atomic()
 def order_paid_receiver(sender, order, **kwargs):
-    assign_coupons(sender, order, **kwargs)
+    if sender.settings.dbvat_issue_on == "order_paid":
+        assign_coupons(sender, order, **kwargs)
 
 
 @receiver(layout_text_variables, dispatch_uid="dbvat_layout_text_variables")
@@ -200,4 +202,4 @@ def html_head_presale(sender, request=None, **kwargs):
 
 settings_hierarkey.add_default("dbvat_source", "list", str)
 settings_hierarkey.add_default("dbvat_discount", 0, int)
-settings_hierarkey.add_default("dbvat_issue_on", "order_placed", str)
+settings_hierarkey.add_default("dbvat_issue_on", "order_paid", str)
