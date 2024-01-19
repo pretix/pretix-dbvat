@@ -15,7 +15,7 @@ class PluginApp(PluginConfig):
 
     class PretixPluginMeta:
         name = gettext_lazy("DB Event Discount")
-        author = "Martin Gross"
+        author = "pretix team"
         description = gettext_lazy(
             "Distribute Deutsche Bahn Veranstaltungsrabatt (DB VAT) eCoupons to your attendees"
         )

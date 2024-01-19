@@ -43,7 +43,7 @@ License
 -------
 
 
-Copyright 2024 Martin Gross
+Copyright 2024 rami.io GmbH
 
 Released under the terms of the Apache License 2.0
 

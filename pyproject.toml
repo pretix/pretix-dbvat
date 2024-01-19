@@ -6,10 +6,10 @@ readme = "README.rst"
 license = {text = "Apache"}
 keywords = ["pretix"]
 authors = [
-    {name = "Martin Gross", email = "gross@rami.io"},
+    {name = "pretix team", email = "support@pretix.eu"},
 ]
 maintainers = [
-    {name = "Martin Gross", email = "gross@rami.io"},
+    {name = "pretix team", email = "support@pretix.eu"},
 ]
 
 dependencies = [
