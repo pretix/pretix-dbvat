@@ -23,7 +23,7 @@ class PluginApp(PluginConfig):
         picture = "pretix_dbvat/db-logo.svg"
         version = __version__
         category = "INTEGRATION"
-        compatibility = "pretix>=4.14.0"
+        compatibility = "pretix>=2023.11.0.dev0"
 
     def ready(self):
         from . import signals  # NOQA

@@ -31,7 +31,7 @@ def navbar_info(sender, request, **kwargs):
         return []
     return [
         {
-            "label": _("DB VAT"),
+            "label": _("DB Event Discount"),
             "icon": "train",
             "url": reverse(
                 "plugins:pretix_dbvat:list",
@@ -40,8 +40,7 @@ def navbar_info(sender, request, **kwargs):
                     "organizer": request.organizer.slug,
                 },
             ),
-            "active": url.namespace == "plugins:pretix_dbvat"
-            and url.url_name != "revocations",
+            "active": url.namespace == "plugins:pretix_dbvat",
         }
     ]
 
