@@ -1,7 +1,6 @@
 import copy
 from django.db import transaction
 from django.dispatch import receiver
-from django.http import HttpRequest
 from django.template.loader import get_template
 from django.urls import resolve, reverse
 from django.utils.translation import gettext_lazy as _
@@ -16,18 +15,8 @@ from pretix.base.signals import (
     order_placed,
 )
 from pretix.control.signals import item_forms, nav_event
-from pretix.multidomain.urlreverse import eventreverse
-from pretix.presale.signals import (
-    checkout_flow_steps,
-    footer_link,
-    html_head,
-    order_info,
-    order_meta_from_request,
-    position_info,
-)
-from pretix.presale.views.cart import cart_session
+from pretix.presale.signals import html_head, order_info, position_info
 
-from .checkoutflow import DBVATCheckoutStep
 from .forms import ItemProductForm
 from .helpers import assign_coupons
 from .models import DBVATCoupon, ItemProduct
@@ -112,23 +101,13 @@ def badges_logentry_display(sender, logentry, **kwargs):
 @receiver(signal=order_placed, dispatch_uid="dbvat_order_placed")
 @transaction.atomic()
 def order_placed_receiver(sender, order, **kwargs):
-    if sender.settings.dbvat_issue_when == "order_placed":
-        if (
-            sender.settings.dbvat_issue_when == "on_demand"
-            and order.meta_info_data.get("dbvat_requested", False)
-        ) or sender.settings.dbvat_issue_when == "always":
-            assign_coupons(sender, order, **kwargs)
+    assign_coupons(sender, order, **kwargs)
 
 
 @receiver(signal=order_paid, dispatch_uid="dbvat_order_paid")
 @transaction.atomic()
 def order_paid_receiver(sender, order, **kwargs):
-    print(order.meta_info_data)
-    if (
-        sender.settings.dbvat_issue_when == "on_demand"
-        and order.meta_info_data.get("dbvat_requested", False)
-    ) or sender.settings.dbvat_issue_when == "always":
-        assign_coupons(sender, order, **kwargs)
+    assign_coupons(sender, order, **kwargs)
 
 
 @receiver(layout_text_variables, dispatch_uid="dbvat_layout_text_variables")
@@ -188,9 +167,6 @@ def recv_layout_text_variables(sender, request=None, **kwargs):
 
 @receiver(order_info, dispatch_uid="dbvat_order_info")
 def order_info(sender: Event, order: Order, request, **kwargs):
-    if not sender.settings.dbvat_show_infobox:
-        return ""
-
     if not DBVATCoupon.objects.filter(used_by__in=order.positions.all()).exists():
         return ""
 
@@ -205,9 +181,6 @@ def order_info(sender: Event, order: Order, request, **kwargs):
 
 @receiver(position_info, dispatch_uid="dbvat_position_info")
 def position_info(sender: Event, order: Order, position, request, **kwargs):
-    if not sender.settings.dbvat_show_infobox:
-        return ""
-
     if not position.dbvat_coupons.exists():
         return ""
 
@@ -226,39 +199,6 @@ def html_head_presale(sender, request=None, **kwargs):
     return template.render({})
 
 
-@receiver(footer_link, dispatch_uid="dbvat_link_privacy")
-def footer_link(sender, request=None, **kwargs):
-    v = []
-    if sender.settings.dbvat_add_infopage_link:
-        v.append(
-            {
-                "label": _("DB Event Discount"),
-                "url": eventreverse(sender, "plugins:pretix_dbvat:terms"),
-            }
-        )
-    return v
-
-
-@receiver(checkout_flow_steps, dispatch_uid="dbvat_checkout_step")
-def checkout_flow_steps(sender, **kwargs):
-    return DBVATCheckoutStep
-
-
-@receiver(order_meta_from_request, dispatch_uid="dbvat_order_meta_from_request")
-def order_meta_from_request(sender: Event, request: HttpRequest, **kwargs):
-    if sender.settings.dbvat_issue_when == "on_demand":
-        cs = cart_session(request)
-        return {
-            "dbvat_requested": cs.get("dbvat_requested", False),
-        }
-    return {}
-
-
 settings_hierarkey.add_default("dbvat_source", "list", str)
 settings_hierarkey.add_default("dbvat_discount", 0, int)
 settings_hierarkey.add_default("dbvat_issue_on", "order_placed", str)
-settings_hierarkey.add_default("dbvat_issue_when", "always", str)
-settings_hierarkey.add_default("dbvat_send_email", True, bool)
-settings_hierarkey.add_default("dbvat_show_infobox", True, bool)
-settings_hierarkey.add_default("dbvat_provide_pdfvars", True, bool)
-settings_hierarkey.add_default("dbvat_add_infopage_link", True, bool)

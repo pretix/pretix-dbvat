@@ -5,7 +5,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import ListView, TemplateView
+from django.views.generic import ListView
 from pretix.base.models import LogEntry
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import CreateView, PaginationMixin, UpdateView
@@ -195,14 +195,3 @@ class CouponBulkCreate(EventPermissionRequiredMixin, CreateView):
         LogEntry.objects.bulk_create(log_entries)
         messages.success(self.request, _("The new coupon have been created."))
         return HttpResponseRedirect(self.get_success_url())
-
-
-class TermsView(TemplateView):
-    template_name = "pretix_dbvat/terms.html"
-
-    def get_context_data(self, **kwargs):
-        ctx = super().get_context_data(**kwargs)
-        ctx["event"] = self.request.event
-        ctx["accept_language"] = self.request.headers.get("Accept-Language", "")
-
-        return ctx

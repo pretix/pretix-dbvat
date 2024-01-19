@@ -37,51 +37,6 @@ class SettingsForm(SettingsForm):
         initial="order_placed",
     )
 
-    dbvat_issue_when = forms.ChoiceField(
-        label=_("Issue eCoupons to"),
-        choices=(
-            ("always", _("all customers, if a matching product is purchased")),
-            ("on_demand", _("customers that actively request them during checkout")),
-        ),
-        initial="always",
-    )
-
-    dbvat_send_email = forms.BooleanField(
-        label=_("Send email with eCoupons to customer"),
-        required=False,
-        initial=True,
-    )
-
-    dbvat_show_infobox = forms.BooleanField(
-        label=_("Show infobox with eCoupons in order overview"),
-        required=False,
-        initial=True,
-    )
-
-    dbvat_provide_pdfvars = forms.BooleanField(
-        label=_("Provide eCoupons as PDF-ticket variables"),
-        help_text=_(
-            "If using the ticket PDF to communicate the eCoupons to your customers, consider always issuing "
-            "the eCoupons to avoid empty fields. Please make sure to also provide all required information "
-            "in the PDF. Be aware though, that eCoupons will not be represented in passbook tickets."
-        ),
-        required=False,
-        initial=True,
-        disabled=True,
-    )
-
-    dbvat_add_infopage_link = forms.BooleanField(
-        label=_(
-            "Add link to information and Terms & Conditions page to the shops footer"
-        ),
-        help_text=_(
-            "Even if this option is disabled, it will still be accessible, as it is linked from the "
-            "E-Mail as well as the information-box."
-        ),
-        required=False,
-        initial=True,
-    )
-
 
 class CouponForm(forms.ModelForm):
     class Meta:

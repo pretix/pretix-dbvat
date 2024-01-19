@@ -35,11 +35,17 @@
             {% endfor %}
         </ul>
         <p>
-            {% url "plugins:pretix_dbvat:terms" event=event.slug organizer=organizer.slug as terms %}
-            {% blocktrans trimmed with bahn="https://www.bahn.de/" navigator="https://www.bahn.de/service/mobile/db-navigator" terms=terms %}
+            {% blocktrans trimmed with bahn="https://www.bahn.de/" navigator="https://www.bahn.de/service/mobile/db-navigator" %}
                 These eCoupons can be redeemed on when booking Flex-, SuperSpar- and Sparpreis tickets using
-                <a href="{{ bahn }}" target="_blank">www.bahn.de</a> or the <a href="{{ navigator }}">DB Navigator apps</a>
-                using your personal account. <a href="{{ terms }}">Terms and conditions apply.</a>
+                <a href="{{ bahn }}" target="_blank">www.bahn.de</a> or the
+                <a href="{{ navigator }}" target="_blank">DB Navigator apps</a>
+                using your personal account. Please make sure to book your outward and return journey separately, since
+                each eCoupon is only applied to the single most expensive ticket in your booking.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans trimmed with terms="https://www.bahn.de/veranstaltungsrabatt" %}
+                Terms and conditions apply, more information on <a href="{{ terms }}" target="_blank">{{ terms }}</a>.
             {% endblocktrans %}
         </p>
     </div>

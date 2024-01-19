@@ -1,12 +1,6 @@
 from django.urls import path
 
-from .views import (
-    CouponBulkCreate,
-    CouponDelete,
-    CouponListView,
-    CouponUpdate,
-    TermsView,
-)
+from .views import CouponBulkCreate, CouponDelete, CouponListView, CouponUpdate
 
 urlpatterns = [
     path(
@@ -29,8 +23,4 @@ urlpatterns = [
         CouponBulkCreate.as_view(),
         name="bulk",
     ),
-]
-
-event_patterns = [
-    path("dbvat/", TermsView.as_view(), name="terms"),
 ]
