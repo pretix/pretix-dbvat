@@ -188,7 +188,7 @@ def position_info(sender: Event, order: Order, position, request, **kwargs):
     template = get_template("pretix_dbvat/order_position_info.html")
     ctx = {
         "order": order,
-        "positions": [position],
+        "positions": order.positions.filter(Q(pk=position.pk) | Q(addon_to_id=position.pk)),
         "event": sender,
     }
     return template.render(ctx, request)
