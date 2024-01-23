@@ -1,5 +1,6 @@
 import copy
 from django.db import transaction
+from django.db.models import Q
 from django.dispatch import receiver
 from django.template.loader import get_template
 from django.urls import resolve, reverse
@@ -188,7 +189,9 @@ def position_info(sender: Event, order: Order, position, request, **kwargs):
     template = get_template("pretix_dbvat/order_position_info.html")
     ctx = {
         "order": order,
-        "positions": order.positions.filter(Q(pk=position.pk) | Q(addon_to_id=position.pk)),
+        "positions": order.positions.filter(
+            Q(pk=position.pk) | Q(addon_to_id=position.pk)
+        ),
         "event": sender,
     }
     return template.render(ctx, request)
