@@ -10,7 +10,7 @@ from pretix.base.forms.widgets import DatePickerWidget
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.models import modelcopy
 
-from .models import DBVATCoupon, ItemProduct
+from .models import DBVATCoupon, ItemDBVATConfig
 
 
 class SettingsForm(SettingsForm):
@@ -152,7 +152,7 @@ class CouponBulkForm(CouponForm):
         return objs
 
 
-class ItemProductForm(forms.ModelForm):
+class ItemDBVATConfigForm(forms.ModelForm):
     issue_coupons = forms.BooleanField(
         label=pgettext_lazy(
             "dbvat", "Issue DB VAT eCoupons if this product is purchased"
@@ -161,7 +161,7 @@ class ItemProductForm(forms.ModelForm):
     )
 
     class Meta:
-        model = ItemProduct
+        model = ItemDBVATConfig
         fields = ["issue_coupons"]
         exclude = []
 

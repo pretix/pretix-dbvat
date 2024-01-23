@@ -17,9 +17,9 @@ from pretix.base.signals import (
 from pretix.control.signals import item_forms, nav_event
 from pretix.presale.signals import html_head, order_info, position_info
 
-from .forms import ItemProductForm
+from .forms import ItemDBVATConfigForm
 from .helpers import assign_coupons
-from .models import DBVATCoupon, ItemProduct
+from .models import DBVATCoupon, ItemDBVATConfig
 
 
 @receiver(nav_event, dispatch_uid="dbvat_nav")
@@ -48,10 +48,10 @@ def navbar_info(sender, request, **kwargs):
 @receiver(item_forms, dispatch_uid="dbvat_item_forms")
 def control_item_forms(sender, request, item, **kwargs):
     try:
-        inst = ItemProduct.objects.get(item=item)
-    except ItemProduct.DoesNotExist:
-        inst = ItemProduct(item=item)
-    return ItemProductForm(
+        inst = ItemDBVATConfig.objects.get(item=item)
+    except ItemDBVATConfig.DoesNotExist:
+        inst = ItemDBVATConfig(item=item)
+    return ItemDBVATConfigForm(
         instance=inst,
         event=sender,
         data=(request.POST if request.method == "POST" else None),
@@ -62,18 +62,18 @@ def control_item_forms(sender, request, item, **kwargs):
 @receiver(item_copy_data, dispatch_uid="dbvat_item_copy")
 def copy_item(sender, source, target, **kwargs):
     try:
-        inst = ItemProduct.objects.get(item=source)
+        inst = ItemDBVATConfig.objects.get(item=source)
         inst = copy.copy(inst)
         inst.pk = None
         inst.item = target
         inst.save()
-    except ItemProduct.DoesNotExist:
+    except ItemDBVATConfig.DoesNotExist:
         pass
 
 
 @receiver(signal=event_copy_data, dispatch_uid="dbvat_copy_data")
 def event_copy_data_receiver(sender, other, question_map, item_map, **kwargs):
-    for ip in ItemProduct.objects.filter(item__event=other):
+    for ip in ItemDBVATConfig.objects.filter(item__event=other):
         ip = copy.copy(ip)
         ip.pk = None
         ip.event = sender

@@ -59,7 +59,7 @@ class DBVATCoupon(LoggedModel):
             raise ValidationError(_("An entry with this code already exists."))
 
 
-class ItemProduct(models.Model):
+class ItemDBVATConfig(models.Model):
     item = models.OneToOneField(
         "pretixbase.Item",
         related_name="dbvat_coupons_item",
