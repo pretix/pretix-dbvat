@@ -13,7 +13,6 @@ def assign_coupons(event: Event, order: Order, **kwargs):
 
     positions = list(
         order.positions.filter(
-            item__dbvat_coupons_item__issue_coupons__isnull=False,
             dbvat_coupons__isnull=True,
             item__dbvat_coupons_item__issue_coupons=True,
         ).select_related("item", "item__dbvat_coupons_item")
