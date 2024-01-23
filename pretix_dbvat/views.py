@@ -36,6 +36,9 @@ class CouponListView(
         ctx = super().get_context_data(**kwargs)
         ctx["count"] = self.request.event.dbvat_coupons.filter(used=False).count()
         ctx["event"] = self.request.event
+        ctx["any_product_issuing"] = self.request.event.items.filter(
+            dbvat_coupons_item__issue_coupons=True
+        ).exists()
         return ctx
 
     def get_queryset(self):

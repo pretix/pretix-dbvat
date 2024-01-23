@@ -6,6 +6,17 @@
 {% block title %}{% trans "DB VAT eCoupons" %}{% endblock %}
 {% block content %}
     <h1>{% trans "DB VAT eCoupons" %}</h1>
+
+    {% if not any_product_issuing %}
+        <div class="alert alert-warning">
+            {% blocktrans trimmed %}
+                Not a single product is set up to issue DB Event Discount eCoupons. In order for this plugin to work,
+                you will need to activate the "Issue DB VAT eCoupons if this product is purchased" checkbox on the
+                "Additional settings" tab of at least on product.
+            {% endblocktrans %}
+        </div>
+    {% endif %}
+
     <div class="tabbed-form">
         {% if event.settings.dbvat_source == "list" %}
             <fieldset>
