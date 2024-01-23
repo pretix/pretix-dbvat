@@ -7,51 +7,6 @@
 {% block content %}
     <h1>{% trans "DB VAT eCoupons" %}</h1>
     <div class="tabbed-form">
-        <fieldset>
-            <legend>{% trans "Settings" %}</legend>
-            <div class="alert alert-info">
-                {% blocktrans trimmed %}
-                    The DB Event Discount is a pilot program, available to select events. Please contact the DB Event
-                    Team learn more about participation eligibility and alternatives such as the DB Event Ticket.
-                {% endblocktrans %}
-            </div>
-            <p>
-                {% blocktrans trimmed %}
-                    By cooperating with Deutsche Bahn (DB), you can make your events more sustainable and offer your
-                    attendees at the same time a significant discount on their long distance train travel.
-                {% endblocktrans %}
-            </p>
-            <p>
-                {% blocktrans trimmed %}
-                    Every attendee is assigned two eCoupons - free of charge - which they can then redeem either on
-                    bahn.de or within the mobile DB navigator apps. Each of the coupons grants the user a predetermined
-                    discount on all long distance tickets - no matter if SuperSpar-, Spar- or Flexpreis-tickets.
-                {% endblocktrans %}
-            </p>
-            <p>
-                {% blocktrans trimmed with dbvatdiscount="https://bahn.de/veranstaltungsrabatt" dbvatcontact="https://www.bahn.de/bahnbusiness/angebot/veranstaltungen/veranstaltungsticket/formular" %}
-                    To get started, please visit <a href="{{ dbvatdiscount }}" target="_blank">{{ dbvatdiscount }}</a>
-                    for more information and <a href="{{ dbvatcontact }}" target="_blank">contact the DB Event Team</a>
-                    to request your participation.
-                {% endblocktrans %}
-            </p>
-            <p>
-                {% blocktrans trimmed %}
-                	Please remember, that you'll need to mark products that are eligible to receive eCoupons explicitly
-                    by activating the corresponding checkbox within the product's "Additional Settings"-tab.
-                {% endblocktrans %}
-            </p>
-            <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
-                {% bootstrap_form_errors form %}
-                {% csrf_token %}
-                {% bootstrap_form form layout="horizontal" %}
-                <div class="form-group submit-group">
-                    <button type="submit" class="btn btn-primary btn-save">
-                        {% trans "Save" %}
-                    </button>
-                </div>
-            </form>
-        </fieldset>
         {% if event.settings.dbvat_source == "list" %}
             <fieldset>
                 <legend>{% trans "eCoupons" %}</legend>
@@ -152,5 +107,50 @@
                 {% endif %}
             </fieldset>
         {% endif %}
+        <fieldset>
+            <legend>{% trans "Settings" %}</legend>
+            <div class="alert alert-info">
+                {% blocktrans trimmed %}
+                    The DB Event Discount is a pilot program, available to select events. Please contact the DB Event
+                    Team learn more about participation eligibility and alternatives such as the DB Event Ticket.
+                {% endblocktrans %}
+            </div>
+            <p>
+                {% blocktrans trimmed %}
+                    By cooperating with Deutsche Bahn (DB), you can make your events more sustainable and offer your
+                    attendees at the same time a significant discount on their long distance train travel.
+                {% endblocktrans %}
+            </p>
+            <p>
+                {% blocktrans trimmed %}
+                    Every attendee is assigned two eCoupons - free of charge - which they can then redeem either on
+                    bahn.de or within the mobile DB navigator apps. Each of the coupons grants the user a predetermined
+                    discount on all long distance tickets - no matter if SuperSpar-, Spar- or Flexpreis-tickets.
+                {% endblocktrans %}
+            </p>
+            <p>
+                {% blocktrans trimmed with dbvatdiscount="https://bahn.de/veranstaltungsrabatt" dbvatcontact="https://www.bahn.de/bahnbusiness/angebot/veranstaltungen/veranstaltungsticket/formular" %}
+                    To get started, please visit <a href="{{ dbvatdiscount }}" target="_blank">{{ dbvatdiscount }}</a>
+                    for more information and <a href="{{ dbvatcontact }}" target="_blank">contact the DB Event Team</a>
+                    to request your participation.
+                {% endblocktrans %}
+            </p>
+            <p>
+                {% blocktrans trimmed %}
+                	Please remember, that you'll need to mark products that are eligible to receive eCoupons explicitly
+                    by activating the corresponding checkbox within the product's "Additional Settings"-tab.
+                {% endblocktrans %}
+            </p>
+            <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+                {% bootstrap_form_errors form %}
+                {% csrf_token %}
+                {% bootstrap_form form layout="horizontal" %}
+                <div class="form-group submit-group">
+                    <button type="submit" class="btn btn-primary btn-save">
+                        {% trans "Save" %}
+                    </button>
+                </div>
+            </form>
+        </fieldset>
     </div>
 {% endblock %}
