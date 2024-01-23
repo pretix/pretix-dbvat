@@ -130,18 +130,17 @@ def recv_layout_text_variables(sender, request=None, **kwargs):
         return _get_coupon(2, op, order, event)
 
     def _get_coupon_bulk(number, ops):
-        # TODO: Pick first or second code
-        d = {
-            c.used_by_id: c
-            for c in DBVATCoupon.objects.filter(
-                used_by__in=[op.pk for op in ops]
-                + [op.addon_to_id for op in ops if op.addon_to_id]
-            )
-        }
+        d = {}
+        for c in DBVATCoupon.objects.filter(
+            used_by__in=[op.pk for op in ops]
+            + [op.addon_to_id for op in ops if op.addon_to_id]
+        ).order_by("pk"):
+            d.setdefault(c.used_by_id, []).append(c)
+
         return [
-            d[op.pk].secret
+            d[op.pk][number - 1].secret
             if op.pk in d
-            else (d[op.addon_to_id].secret if op.addon_to_id in d else "")
+            else (d[op.addon_to_id][number - 1].secret if op.addon_to_id in d else "")
             for op in ops
         ]
 
@@ -156,13 +155,13 @@ def recv_layout_text_variables(sender, request=None, **kwargs):
             "label": _("DB VAT eCoupon #1"),
             "editor_sample": "ABCDE12345",
             "evaluate": _get_coupon_1,
-            # "evaluate_bulk": _get_coupon_1_bulk,
+            "evaluate_bulk": _get_coupon_1_bulk,
         },
         "dbvat_coupon_2": {
             "label": _("DB VAT eCoupon #2"),
             "editor_sample": "ABCDE12345",
             "evaluate": _get_coupon_2,
-            # "evaluate_bulk": _get_coupon_2_bulk,
+            "evaluate_bulk": _get_coupon_2_bulk,
         },
     }
 
