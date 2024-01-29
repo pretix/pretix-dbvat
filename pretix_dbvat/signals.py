@@ -138,9 +138,13 @@ def recv_layout_text_variables(sender, request=None, **kwargs):
             d.setdefault(c.used_by_id, []).append(c)
 
         return [
-            d[op.pk][number - 1].secret
-            if op.pk in d
-            else (d[op.addon_to_id][number - 1].secret if op.addon_to_id in d else "")
+            (
+                d[op.pk][number - 1].secret
+                if op.pk in d
+                else (
+                    d[op.addon_to_id][number - 1].secret if op.addon_to_id in d else ""
+                )
+            )
             for op in ops
         ]
 
