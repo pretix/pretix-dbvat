@@ -1,0 +1,5 @@
+recursive-include pretix_dbvat/static *
+recursive-include pretix_dbvat/templates *
+recursive-include pretix_dbvat/locale *
+include LICENSE
+exclude .gitlab-ci.yml

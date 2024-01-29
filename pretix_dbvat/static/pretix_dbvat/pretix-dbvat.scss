@@ -1,0 +1,11 @@
+$db-red: #EC0016;
+
+.panel-dbred {
+  @extend .panel-default !optional;
+  border-color: $db-red;
+
+  .panel-heading {
+    background-color: $db-red;
+    color: white;
+  }
+}

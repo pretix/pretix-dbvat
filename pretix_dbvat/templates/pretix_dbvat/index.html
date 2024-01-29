@@ -1,0 +1,168 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load urlreplace %}
+{% load money %}
+{% block title %}{% trans "DB VAT eCoupons" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "DB VAT eCoupons" %}</h1>
+
+    {% if not any_product_issuing %}
+        <div class="alert alert-warning">
+            {% blocktrans trimmed %}
+                Not a single product is set up to issue DB Event Discount eCoupons. In order for this plugin to work,
+                you will need to activate the "Issue DB VAT eCoupons if this product is purchased" checkbox on the
+                "Additional settings" tab of at least on product.
+            {% endblocktrans %}
+        </div>
+    {% endif %}
+
+    <div class="tabbed-form">
+        {% if event.settings.dbvat_source == "list" %}
+            <fieldset>
+                <legend>{% trans "eCoupons" %}</legend>
+                {% if coupons|length == 0 %}
+                    <div class="empty-collection">
+                        <p>
+                            {% blocktrans trimmed %}
+                                You haven't imported any eCoupon codes yet.
+                            {% endblocktrans %}
+                        </p>
+
+                        <a href="{% url "plugins:pretix_dbvat:bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                           class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Import new eCoupons" %}
+                        </a>
+                    </div>
+                {% else %}
+                    <p>
+                        {% blocktrans trimmed %}
+                            <strong>{{ count }}</strong> eCoupon codes are currently available to be used.
+                        {% endblocktrans %}
+                    </p>
+                    <p>
+                        <a href="{% url "plugins:pretix_dbvat:bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                           class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Import new eCoupons" %}
+                        </a>
+                    </p>
+                    {% csrf_token %}
+                    <div class="table-responsive">
+                        <table class="table table-hover table-condensed table-quotas">
+                            <thead>
+                            <tr>
+                                <th>
+                                    {% trans "eCoupon code" %}
+                                </th>
+                                <th>
+                                    {% trans "Valid from" %}
+                                </th>
+                                <th>
+                                    {% trans "Valid until" %}
+                                </th>
+                                <th>
+                                    {% trans "Used by ticket" %}
+                                </th>
+                                {% if request.event.has_subevents %}
+                                    <th>
+                                        {% trans "Date" context "subevent" %}
+                                    </th>
+                                {% endif %}
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for s in coupons %}
+                                <tr>
+                                    <td>
+                                        {% if s.used %}
+                                            <del>{% else %}<strong>{% endif %}
+                                        <a href="{% url "plugins:pretix_dbvat:coupon" organizer=request.event.organizer.slug event=request.event.slug secret=s.id %}">{{ s.secret }}</a>
+                                        {% if s.used %}</del>{% else %}</strong>{% endif %}
+                                    </td>
+                                    <td>
+                                        {{ s.valid_from }}
+                                    </td>
+                                    <td>
+                                        {{ s.valid_to }}
+                                    </td>
+                                    <td>
+                                        {% if s.used_by %}
+                                            <a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=s.used_by.order.code %}">
+                                                {{ s.used_by.order.code }}-{{ s.used_by.positionid }}
+                                            </a>
+                                        {% endif %}
+                                    </td>
+                                    {% if request.event.has_subevents %}
+                                        <td>
+                                            {{ v.subevent.name }} – {{ v.subevent.get_date_range_display }}
+                                            {% if request.event.settings.show_times %}
+                                                {{ v.subevent.date_from|date:"TIME_FORMAT" }}
+                                            {% endif %}
+                                        </td>
+                                    {% endif %}
+                                    <td class="text-right flip">
+                                        <a href="{% url "plugins:pretix_dbvat:bulk" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ s.id }}"
+                                           class="btn btn-sm btn-default"
+                                           title="{% trans "Use as a template for a new import" %}"
+                                           data-toggle="tooltip">
+                                            <span class="fa fa-copy"></span>
+                                        </a>
+                                        <a href="{% url "plugins:pretix_dbvat:delete" organizer=request.event.organizer.slug event=request.event.slug secret=s.id %}"
+                                           class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% include "pretixcontrol/pagination.html" %}
+                {% endif %}
+            </fieldset>
+        {% endif %}
+        <fieldset>
+            <legend>{% trans "Settings" %}</legend>
+            <div class="alert alert-info">
+                {% blocktrans trimmed %}
+                    The DB Event Discount is a pilot program, available to select events. Please contact the DB Event
+                    Team learn more about participation eligibility and alternatives such as the DB Event Ticket.
+                {% endblocktrans %}
+            </div>
+            <p>
+                {% blocktrans trimmed %}
+                    By cooperating with Deutsche Bahn (DB), you can make your events more sustainable and offer your
+                    attendees at the same time a significant discount on their long distance train travel.
+                {% endblocktrans %}
+            </p>
+            <p>
+                {% blocktrans trimmed %}
+                    Every attendee is assigned two eCoupons - free of charge - which they can then redeem either on
+                    bahn.de or within the mobile DB navigator apps. Each of the coupons grants the user a predetermined
+                    discount on all long distance tickets - no matter if SuperSpar-, Spar- or Flexpreis-tickets.
+                {% endblocktrans %}
+            </p>
+            <p>
+                {% blocktrans trimmed with dbvatdiscount="https://bahn.de/veranstaltungsrabatt" dbvatcontact="https://www.bahn.de/bahnbusiness/angebot/veranstaltungen/veranstaltungsticket/formular" %}
+                    To get started, please visit <a href="{{ dbvatdiscount }}" target="_blank">{{ dbvatdiscount }}</a>
+                    for more information and <a href="{{ dbvatcontact }}" target="_blank">contact the DB Event Team</a>
+                    to request your participation. Please make sure to explicitly mention the Event Discount
+                    ("Veranstaltungsrabatt") and pretix in your message.
+                {% endblocktrans %}
+            </p>
+            <p>
+                {% blocktrans trimmed %}
+                	Please remember, that you'll need to mark products that are eligible to receive eCoupons explicitly
+                    by activating the corresponding checkbox within the product's "Additional Settings"-tab.
+                {% endblocktrans %}
+            </p>
+            <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+                {% bootstrap_form_errors form %}
+                {% csrf_token %}
+                {% bootstrap_form form layout="horizontal" %}
+                <div class="form-group submit-group">
+                    <button type="submit" class="btn btn-primary btn-save">
+                        {% trans "Save" %}
+                    </button>
+                </div>
+            </form>
+        </fieldset>
+    </div>
+{% endblock %}

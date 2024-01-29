@@ -1,0 +1,5 @@
+[plugin]
+package = "pretix-dbvat"
+modules = [ "pretix_dbvat" ]
+marketplace_name = "dbvat"
+
