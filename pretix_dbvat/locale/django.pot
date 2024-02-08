@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-23 19:03+0100\n"
+"POT-Creation-Date: 2024-02-08 13:57+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -119,11 +119,11 @@ msgstr ""
 msgid "Failed to assign an DB VAT eCoupon."
 msgstr ""
 
-#: pretix_dbvat/signals.py:155
+#: pretix_dbvat/signals.py:159
 msgid "DB VAT eCoupon #1"
 msgstr ""
 
-#: pretix_dbvat/signals.py:161
+#: pretix_dbvat/signals.py:165
 msgid "DB VAT eCoupon #2"
 msgstr ""
 
@@ -137,7 +137,17 @@ msgstr ""
 msgid "Import new DB VAT eCoupons"
 msgstr ""
 
-#: pretix_dbvat/templates/pretix_dbvat/bulk.html:21
+#: pretix_dbvat/templates/pretix_dbvat/bulk.html:20
+msgid ""
+"Please make sure to insert the dates that the vouchers are valid for travel "
+"- not the dates for when they can be used to book travel. The former will be "
+"provided to you by DB and should only cover a few days around your event "
+"date. The latter, to be ignored dates, span a much larger period and "
+"probably cover the time period from now until the scheduled end of your "
+"event."
+msgstr ""
+
+#: pretix_dbvat/templates/pretix_dbvat/bulk.html:29
 #: pretix_dbvat/templates/pretix_dbvat/detail.html:44
 #: pretix_dbvat/templates/pretix_dbvat/index.html:162
 msgid "Save"

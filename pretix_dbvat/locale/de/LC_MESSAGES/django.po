@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-23 19:03+0100\n"
+"POT-Creation-Date: 2024-02-08 13:57+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Martin Gross\n"
 "Language-Team: \n"
@@ -20,7 +20,8 @@ msgstr "DB Veranstaltungsrabatt"
 msgid ""
 "Distribute Deutsche Bahn Veranstaltungsrabatt (DB VAT) eCoupons to your "
 "attendees"
-msgstr "Verteilen Sie DB Veranstaltungsrabatt (DB VAT) eCoupons an Ihre "
+msgstr ""
+"Verteilen Sie DB Veranstaltungsrabatt (DB VAT) eCoupons an Ihre "
 "Veranstaltungsteilnehmer"
 
 #: pretix_dbvat/forms.py:18
@@ -118,11 +119,11 @@ msgstr "DB VAT eCoupon geändert."
 msgid "Failed to assign an DB VAT eCoupon."
 msgstr "DB VAT eCoupon konnte nicht zugewiesen werden."
 
-#: pretix_dbvat/signals.py:155
+#: pretix_dbvat/signals.py:159
 msgid "DB VAT eCoupon #1"
 msgstr "DB VAT eCoupon #1"
 
-#: pretix_dbvat/signals.py:161
+#: pretix_dbvat/signals.py:165
 msgid "DB VAT eCoupon #2"
 msgstr "DB VAT eCoupon #2"
 
@@ -136,7 +137,24 @@ msgstr "DB VAT eCoupons"
 msgid "Import new DB VAT eCoupons"
 msgstr "Neue DB VAT eCoupons importieren"
 
-#: pretix_dbvat/templates/pretix_dbvat/bulk.html:21
+#: pretix_dbvat/templates/pretix_dbvat/bulk.html:20
+msgid ""
+"Please make sure to insert the dates that the vouchers are valid for travel "
+"- not the dates for when they can be used to book travel. The former will be "
+"provided to you by DB and should only cover a few days around your event "
+"date. The latter, to be ignored dates, span a much larger period and "
+"probably cover the time period from now until the scheduled end of your "
+"event."
+msgstr ""
+"Bitte stellen Sie sicher, dass Sie als Gültigkeitsdatum den Reisezeitraum "
+"eingeben - und nicht den Buchungszeitraum. Der Reisezeitraum für die eCoupons "
+"wird Ihnen von der DB mitgeteilt und deckt in der Regel den das Zeitfenster um "
+"Ihre Veranstaltung plus/minus einige Tage ab. Der (hier irrelevante) "
+"Buchungszeitraum hingegen sollte sehr viel länger sein und sich vom jetzigen "
+"Zeitpunkt bis hin zum geplanten Ende Ihrer Veranstaltung erstrecken."
+
+
+#: pretix_dbvat/templates/pretix_dbvat/bulk.html:29
 #: pretix_dbvat/templates/pretix_dbvat/detail.html:44
 #: pretix_dbvat/templates/pretix_dbvat/index.html:162
 msgid "Save"
@@ -152,8 +170,8 @@ msgstr "Lösche DB VAT eCoupon"
 msgid ""
 "Are you sure you want to delete the eCoupon code <strong>%(secret)s</strong>?"
 msgstr ""
-"Sind Sie sich sicher, dass Sie den eCoupon <strong>%(secret)s</strong> löschen "
-"möchten?"
+"Sind Sie sich sicher, dass Sie den eCoupon <strong>%(secret)s</strong> "
+"löschen möchten?"
 
 #: pretix_dbvat/templates/pretix_dbvat/delete.html:12
 msgid "Cancel"
@@ -170,7 +188,9 @@ msgstr "DB VAT eCoupon"
 
 #: pretix_dbvat/templates/pretix_dbvat/detail.html:11
 msgid "This eCoupon already has been used. It is not recommended to modify it."
-msgstr "Dieser eCoupon wurde bereits verwendet. Er sollte nicht mehr verändert werden."
+msgstr ""
+"Dieser eCoupon wurde bereits verwendet. Er sollte nicht mehr verändert "
+"werden."
 
 #: pretix_dbvat/templates/pretix_dbvat/detail.html:35
 msgid "History"
@@ -205,8 +225,7 @@ msgstr "Neue eCoupons importieren"
 #, python-format
 msgid ""
 "<strong>%(count)s</strong> eCoupon codes are currently available to be used."
-msgstr ""
-"<strong>%(count)s</strong> eCoupons können aktuell verteilt werden."
+msgstr "<strong>%(count)s</strong> eCoupons können aktuell verteilt werden."
 
 #: pretix_dbvat/templates/pretix_dbvat/index.html:62
 msgid "Used by ticket"
@@ -226,10 +245,10 @@ msgid ""
 "contact the DB Event Team learn more about participation eligibility and "
 "alternatives such as the DB Event Ticket."
 msgstr ""
-"Der DB Veranstaltungsrabatt ist ein Pilotprogramm, welches nur für ausgewählte "
-"Veranstaltungen zur Verfügung steht. Bitte kontaktieren Sie das DB "
-"Veranstaltungs-Team um mehr Details über die Möglichkeit einer Teilnahme und "
-"Alternativen, wie bspw. dem DB Veranstaltungsticket, zu erfahren."
+"Der DB Veranstaltungsrabatt ist ein Pilotprogramm, welches nur für "
+"ausgewählte Veranstaltungen zur Verfügung steht. Bitte kontaktieren Sie das "
+"DB Veranstaltungs-Team um mehr Details über die Möglichkeit einer Teilnahme "
+"und Alternativen, wie bspw. dem DB Veranstaltungsticket, zu erfahren."
 
 #: pretix_dbvat/templates/pretix_dbvat/index.html:130
 msgid ""
@@ -237,9 +256,10 @@ msgid ""
 "sustainable and offer your attendees at the same time a significant discount "
 "on their long distance train travel."
 msgstr ""
-"Durch eine Kooperation mit der Deutschen Bahn (DB) können Sie Ihre Veranstaltungen "
-"noch nachhaltiger machen und Ihren Teilnehmenden gleichzeitig einen signifikanten "
-"Rabatt auf Zugtickets des Fernverkehrs anbieten."
+"Durch eine Kooperation mit der Deutschen Bahn (DB) können Sie Ihre "
+"Veranstaltungen noch nachhaltiger machen und Ihren Teilnehmenden "
+"gleichzeitig einen signifikanten Rabatt auf Zugtickets des Fernverkehrs "
+"anbieten."
 
 #: pretix_dbvat/templates/pretix_dbvat/index.html:136
 msgid ""
@@ -265,9 +285,9 @@ msgid ""
 msgstr ""
 "Um am DB Veranstaltungsrabatt teilzunehmen, besuchen Sie bitte <a "
 "href=\"%(dbvatdiscount)s\" target=\"_blank\">%(dbvatdiscount)s</a> und <a "
-"href=\"%(dbvatcontact)s\" target=\"_blank\">kontaktieren Sie das DB Veranstaltungs-"
-"Team</a>. Bitte erwähnen Sie dabei explizit den Veranstaltungsrabatt und pretix "
-"in Ihrer Nachricht."
+"href=\"%(dbvatcontact)s\" target=\"_blank\">kontaktieren Sie das DB "
+"Veranstaltungs-Team</a>. Bitte erwähnen Sie dabei explizit den "
+"Veranstaltungsrabatt und pretix in Ihrer Nachricht."
 
 #: pretix_dbvat/templates/pretix_dbvat/index.html:151
 msgid ""
@@ -300,8 +320,7 @@ msgstr ""
 #: pretix_dbvat/templates/pretix_dbvat/order_position_info.html:29
 #, python-format
 msgid "Valid for travel from %(valid_from)s until %(valid_to)s"
-msgstr ""
-"Gültig im Reisezeitraum von %(valid_from)s bis zum %(valid_to)s"
+msgstr "Gültig im Reisezeitraum von %(valid_from)s bis zum %(valid_to)s"
 
 #: pretix_dbvat/templates/pretix_dbvat/order_position_info.html:38
 #, python-format
@@ -314,11 +333,11 @@ msgid ""
 "most expensive ticket in your booking."
 msgstr ""
 "Diese eCoupons können bei der Buchung von Flex-, SuperSpar- und Sparpreis-"
-"Tickets auf <a href=\"%(bahn)s\" target=\"_blank\">www.bahn.de</a> oder in den "
-"<a href=\"%(navigator)s\" target=\"_blank\">DB Navigator apps</a> mit einem "
-"Privat-Account eingelöst werden. Bitte buchen Sie Hin- und Rückfahrt in zwei "
-"separaten Buchungen, da jeder eCoupon nur einen Rabatt auf die eine, teuerste "
-"Fahrkarte im Warenkorb gewährt."
+"Tickets auf <a href=\"%(bahn)s\" target=\"_blank\">www.bahn.de</a> oder in "
+"den <a href=\"%(navigator)s\" target=\"_blank\">DB Navigator apps</a> mit "
+"einem Privat-Account eingelöst werden. Bitte buchen Sie Hin- und Rückfahrt "
+"in zwei separaten Buchungen, da jeder eCoupon nur einen Rabatt auf die eine, "
+"teuerste Fahrkarte im Warenkorb gewährt."
 
 #: pretix_dbvat/templates/pretix_dbvat/order_position_info.html:47
 #, python-format
@@ -326,8 +345,8 @@ msgid ""
 "Terms and conditions apply, more information on <a href=\"%(terms)s\" "
 "target=\"_blank\">%(terms)s</a>."
 msgstr ""
-"Einlösebedingungen und weitere Informationen finden sich unter "
-"<a href=\"%(terms)s\" target=\"_blank\">%(terms)s</a>."
+"Einlösebedingungen und weitere Informationen finden sich unter <a "
+"href=\"%(terms)s\" target=\"_blank\">%(terms)s</a>."
 
 #: pretix_dbvat/views.py:73 pretix_dbvat/views.py:123
 msgid "The requested ticket code does not exist."
@@ -335,9 +354,8 @@ msgstr "Der angefragte Ticket Code existiert nicht."
 
 #: pretix_dbvat/views.py:79 pretix_dbvat/views.py:92
 msgid "A coupon code can not be deleted if it already has been used."
-msgstr
-"Ein Coupon Code kann nicht gelöscht werden, wenn er bereits verwendet "
-"wurde."
+msgstr ""
+"Ein Coupon Code kann nicht gelöscht werden, wenn er bereits verwendet wurde."
 
 #: pretix_dbvat/views.py:99
 msgid "The selected ticket code has been deleted."
