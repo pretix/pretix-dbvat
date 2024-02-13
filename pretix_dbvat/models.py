@@ -50,13 +50,20 @@ class DBVATCoupon(LoggedModel):
 
     @staticmethod
     def clean_secret(data, event, pk):
-        if (
-            "secret" in data
-            and DBVATCoupon.objects.filter(
+        if "secret" in data:
+            s = data["secret"].split(";")[0]
+            if len(s) != 16:
+                raise ValidationError(
+                    _(
+                        "Coupon code '{code}' does not look like a valid DB eCoupon."
+                    ).format(code=data["secret"])
+                )
+            data["secret"] = s
+
+            if DBVATCoupon.objects.filter(
                 Q(secret__iexact=data["secret"]) & Q(event=event) & ~Q(pk=pk)
-            ).exists()
-        ):
-            raise ValidationError(_("An entry with this code already exists."))
+            ).exists():
+                raise ValidationError(_("An entry with this code already exists."))
 
 
 class ItemDBVATConfig(models.Model):

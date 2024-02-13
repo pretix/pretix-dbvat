@@ -119,6 +119,18 @@ class CouponBulkForm(CouponForm):
     def clean(self):
         data = super().clean()
 
+        cleaned_secrets = []
+        for secret in data["secrets"]:
+            s = secret.split(";")[0]
+            if len(s) != 16:
+                raise ValidationError(
+                    _(
+                        "Coupon code '{code}' does not look like a valid DB eCoupon."
+                    ).format(code=secret)
+                )
+            cleaned_secrets.append(s)
+        data["secrets"] = cleaned_secrets
+
         vouchers = self.instance.event.dbvat_coupons.annotate(
             secret_lower=Lower("secret")
         ).filter(secret_lower__in=[c.lower() for c in data["secrets"]])
