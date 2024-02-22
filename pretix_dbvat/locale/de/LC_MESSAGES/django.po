@@ -22,7 +22,7 @@ msgid ""
 "attendees"
 msgstr ""
 "Verteilen Sie DB Veranstaltungsrabatt (DB VAT) eCoupons an Ihre "
-"Veranstaltungsteilnehmer"
+"Teilnehmenden"
 
 #: pretix_dbvat/forms.py:18
 msgid "eCoupon source"
@@ -194,7 +194,7 @@ msgstr ""
 
 #: pretix_dbvat/templates/pretix_dbvat/detail.html:35
 msgid "History"
-msgstr "Historie"
+msgstr "Verlauf"
 
 #: pretix_dbvat/templates/pretix_dbvat/index.html:12
 msgid ""
@@ -214,7 +214,7 @@ msgstr "eCoupons"
 
 #: pretix_dbvat/templates/pretix_dbvat/index.html:27
 msgid "You haven't imported any eCoupon codes yet."
-msgstr "Sie haben noch keine eCoupons bisher importiert."
+msgstr "Sie haben bisher noch keine eCoupons importiert."
 
 #: pretix_dbvat/templates/pretix_dbvat/index.html:33
 #: pretix_dbvat/templates/pretix_dbvat/index.html:44
@@ -247,7 +247,7 @@ msgid ""
 msgstr ""
 "Der DB Veranstaltungsrabatt ist ein Pilotprogramm, welches nur für "
 "ausgewählte Veranstaltungen zur Verfügung steht. Bitte kontaktieren Sie das "
-"DB Veranstaltungs-Team um mehr Details über die Möglichkeit einer Teilnahme "
+"DB Veranstaltungs-Team, um mehr Details über die Möglichkeit einer Teilnahme "
 "und Alternativen, wie bspw. dem DB Veranstaltungsticket, zu erfahren."
 
 #: pretix_dbvat/templates/pretix_dbvat/index.html:130
@@ -269,9 +269,9 @@ msgid ""
 "tickets - no matter if SuperSpar-, Spar- or Flexpreis-tickets."
 msgstr ""
 "Teilnehmenden werden - kostenfrei - zwei eCoupons zugewiesen, welche sie "
-"entweder auf bahn.de oder innerhalb der mobilen DB Navigator apps einlösen "
+"entweder auf bahn.de oder innerhalb der mobilen DB Navigator Apps einlösen "
 "können. Jeder der beiden eCoupons gewährt hierbei einen festen, vorab "
-"vereinbarten, Rabatt auf alle Tickets des Fernverkehrs - egal ob SuperSpar-, "
+"vereinbarten Rabatt auf alle Tickets des Fernverkehrs - egal ob SuperSpar-, "
 "Spar- oder Flexpreis."
 
 #: pretix_dbvat/templates/pretix_dbvat/index.html:143
@@ -296,8 +296,8 @@ msgid ""
 "the product's \"Additional Settings\"-tab."
 msgstr ""
 "Bitte bedenken Sie, dass Produkte explizit freigeschaltet werden müssen, um "
-"eCoupons zu erhalten. Dies geschieht durch das Aktivieren der entsprechende "
-"Option im \"Zusätzlichen Einstellungen\"-Tab des jeweiligen Produktes."
+"eCoupons zu erhalten. Dies geschieht durch das Aktivieren der entsprechenden "
+"Option im \"Zusätzliche Einstellungen\"-Tab des jeweiligen Produktes."
 
 #: pretix_dbvat/templates/pretix_dbvat/order_position_info.html:13
 #, python-format
@@ -307,7 +307,7 @@ msgid ""
 "on Deutsche Bahn."
 msgstr ""
 "Für eine nachhaltige Anreise zu unserer Veranstaltung erhalten Sie von uns "
-"einen exklusiven %(discount_percentage)s%% Veranstaltungsrabatt für den "
+"einen exklusiven Veranstaltungsrabatt von %(discount_percentage)s%% für den "
 "Fernverkehr der Deutschen Bahn."
 
 #: pretix_dbvat/templates/pretix_dbvat/order_position_info.html:19
@@ -320,7 +320,7 @@ msgstr ""
 #: pretix_dbvat/templates/pretix_dbvat/order_position_info.html:29
 #, python-format
 msgid "Valid for travel from %(valid_from)s until %(valid_to)s"
-msgstr "Gültig im Reisezeitraum von %(valid_from)s bis zum %(valid_to)s"
+msgstr "Gültig im Reisezeitraum vom %(valid_from)s bis zum %(valid_to)s"
 
 #: pretix_dbvat/templates/pretix_dbvat/order_position_info.html:38
 #, python-format
@@ -334,7 +334,7 @@ msgid ""
 msgstr ""
 "Diese eCoupons können bei der Buchung von Flex-, SuperSpar- und Sparpreis-"
 "Tickets auf <a href=\"%(bahn)s\" target=\"_blank\">www.bahn.de</a> oder in "
-"den <a href=\"%(navigator)s\" target=\"_blank\">DB Navigator apps</a> mit "
+"den <a href=\"%(navigator)s\" target=\"_blank\">DB Navigator Apps</a> mit "
 "einem Privat-Account eingelöst werden. Bitte buchen Sie Hin- und Rückfahrt "
 "in zwei separaten Buchungen, da jeder eCoupon nur einen Rabatt auf die eine, "
 "teuerste Fahrkarte im Warenkorb gewährt."
