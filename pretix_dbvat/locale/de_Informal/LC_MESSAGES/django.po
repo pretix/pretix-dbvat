@@ -303,7 +303,7 @@ msgid ""
 "exclusive %(discount_percentage)s%% event discount for long-distance travel "
 "on Deutsche Bahn."
 msgstr ""
-"Für eine nachhaltige Anreise zu unserer Veranstaltung erhälst Du von uns "
+"Für eine nachhaltige Anreise zu unserer Veranstaltung erhältst Du von uns "
 "einen exklusiven %(discount_percentage)s%% Veranstaltungsrabatt für den "
 "Fernverkehr der Deutschen Bahn."
 
