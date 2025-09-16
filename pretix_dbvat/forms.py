@@ -167,9 +167,7 @@ class CouponBulkForm(CouponForm):
 
 class ItemDBVATConfigForm(forms.ModelForm):
     issue_coupons = forms.BooleanField(
-        label=pgettext_lazy(
-            "dbvat", "Item is eligible for DB Event-Offer"
-        ),
+        label=pgettext_lazy("dbvat", "Item is eligible for DB Event-Offer"),
         required=False,
     )
 
@@ -197,10 +195,12 @@ class ItemDBVATConfigForm(forms.ModelForm):
 
 class VATSettingsForm(SettingsForm):
     dbvat_event_id = forms.CharField(
-        label=_('DB Event ID'),
-        help_text=_('The ID of your event as displayed in the DB Event-Offers portal. If your URL is '
-                    '<code>https://www.veranstaltungsticket-bahn.de/?event=33148&language=de</code>, please enter '
-                    '<code>33148</code>.'),
+        label=_("DB Event ID"),
+        help_text=_(
+            "The ID of your event as displayed in the DB Event-Offers portal. If your URL is "
+            "<code>https://www.veranstaltungsticket-bahn.de/?event=33148&language=de</code>, please enter "
+            "<code>33148</code>."
+        ),
         required=False,
     )
 
@@ -211,6 +211,8 @@ class VATSettingsForm(SettingsForm):
             return None
         else:
             try:
-                return parse_qs(urlparse(self.cleaned_data.get("dbvat_event_id")).query)["event"][0]
+                return parse_qs(
+                    urlparse(self.cleaned_data.get("dbvat_event_id")).query
+                )["event"][0]
             except KeyError:
                 raise ValidationError(_("Invalid DB Event ID"))

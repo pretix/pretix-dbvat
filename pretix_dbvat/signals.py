@@ -201,7 +201,9 @@ def order_info(sender: Event, order: Order, request, **kwargs):
         }
         return template.render(ctx, request)
     else:
-        if not ItemDBVATConfig.objects.filter(item__in=order.positions.all().values_list('item'), issue_coupons=True).exists():
+        if not ItemDBVATConfig.objects.filter(
+            item__in=order.positions.all().values_list("item"), issue_coupons=True
+        ).exists():
             return ""
 
         template = get_template("pretix_dbvat/vat/order_position_info.html")
@@ -224,7 +226,10 @@ def position_info(sender: Event, order: Order, position, request, **kwargs):
         }
         return template.render(ctx, request)
     else:
-        if not hasattr(position.item, 'dbvat_coupons_item') or not position.item.dbvat_coupons_item.issue_coupons:
+        if (
+            not hasattr(position.item, "dbvat_coupons_item")
+            or not position.item.dbvat_coupons_item.issue_coupons
+        ):
             return ""
 
         template = get_template("pretix_dbvat/vat/order_position_info.html")

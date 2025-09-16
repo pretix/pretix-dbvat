@@ -67,9 +67,9 @@ def dbvat_url_context(request: HttpRequest):
     locale = "de" if request.LANGUAGE_CODE.startswith("de") else "en"
 
     return {
-        'dbvat_url': f'https://www.veranstaltungsticket-bahn.de/?event={dbvat_event_id}&language={locale}',
-        'dbvat_event_id': dbvat_event_id,
-        'dbvat_tc_url': 'http://www.bahn.de/eventangebote-teilnehmende',
+        "dbvat_url": f"https://www.veranstaltungsticket-bahn.de/?event={dbvat_event_id}&language={locale}",
+        "dbvat_event_id": dbvat_event_id,
+        "dbvat_tc_url": "http://www.bahn.de/eventangebote-teilnehmende",
     }
 
 
@@ -82,7 +82,12 @@ class VARRequiredMixin:
         if is_dbvar_event(request.event):
             return super().get(request, *args, **kwargs)
         else:
-            messages.info(request, _("The DB Event Discount has been discontinued and replaced by the DB Event-Offers."))
+            messages.info(
+                request,
+                _(
+                    "The DB Event Discount has been discontinued and replaced by the DB Event-Offers."
+                ),
+            )
             return redirect(
                 reverse(
                     "plugins:pretix_dbvat:settings",

@@ -6,7 +6,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import ListView
-from pretix.base.models import LogEntry, Event
+from pretix.base.models import Event, LogEntry
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import CreateView, PaginationMixin, UpdateView
 from pretix.control.views.event import EventSettingsFormView, EventSettingsViewMixin
