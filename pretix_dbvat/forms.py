@@ -9,11 +9,12 @@ from pretix.base.forms import SettingsForm
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.models import modelcopy
+from urllib.parse import parse_qs, urlparse
 
 from .models import DBVATCoupon, ItemDBVATConfig
 
 
-class SettingsForm(SettingsForm):
+class VARSettingsForm(SettingsForm):
     dbvat_source = forms.ChoiceField(
         label=_("eCoupon source"),
         choices=(
@@ -167,7 +168,7 @@ class CouponBulkForm(CouponForm):
 class ItemDBVATConfigForm(forms.ModelForm):
     issue_coupons = forms.BooleanField(
         label=pgettext_lazy(
-            "dbvat", "Issue DB VAT eCoupons if this product is purchased"
+            "dbvat", "Item is eligible for DB Event-Offer"
         ),
         required=False,
     )
@@ -192,3 +193,24 @@ class ItemDBVATConfigForm(forms.ModelForm):
             v = self.cleaned_data["issue_coupons"]
             self.instance.issue_coupons = v
             return super().save(commit=commit)
+
+
+class VATSettingsForm(SettingsForm):
+    dbvat_event_id = forms.CharField(
+        label=_('DB Event ID'),
+        help_text=_('The ID of your event as displayed in the DB Event-Offers portal. If your URL is '
+                    '<code>https://www.veranstaltungsticket-bahn.de/?event=33148&language=de</code>, please enter '
+                    '<code>33148</code>.'),
+        required=False,
+    )
+
+    def clean_dbvat_event_id(self):
+        if self.cleaned_data.get("dbvat_event_id", "").isnumeric():
+            return self.cleaned_data.get("dbvat_event_id")
+        elif self.cleaned_data.get("dbvat_event_id", None) == "":
+            return None
+        else:
+            try:
+                return parse_qs(urlparse(self.cleaned_data.get("dbvat_event_id")).query)["event"][0]
+            except KeyError:
+                raise ValidationError(_("Invalid DB Event ID"))

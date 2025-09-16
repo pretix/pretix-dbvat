@@ -19,7 +19,7 @@ from pretix.control.signals import item_forms, nav_event
 from pretix.presale.signals import html_head, order_info, position_info
 
 from .forms import ItemDBVATConfigForm
-from .helpers import assign_coupons
+from .helpers import assign_coupons, dbvat_url_context, is_dbvar_event
 from .models import DBVATCoupon, ItemDBVATConfig
 
 
@@ -30,20 +30,37 @@ def navbar_info(sender, request, **kwargs):
         request.organizer, request.event, "can_view_orders", request=request
     ):
         return []
-    return [
-        {
-            "label": _("DB Event Discount"),
-            "icon": "train",
-            "url": reverse(
-                "plugins:pretix_dbvat:list",
-                kwargs={
-                    "event": request.event.slug,
-                    "organizer": request.organizer.slug,
-                },
-            ),
-            "active": url.namespace == "plugins:pretix_dbvat",
-        }
-    ]
+
+    if is_dbvar_event(sender):
+        return [
+            {
+                "label": _("DB Event Discount"),
+                "icon": "train",
+                "url": reverse(
+                    "plugins:pretix_dbvat:list",
+                    kwargs={
+                        "event": request.event.slug,
+                        "organizer": request.organizer.slug,
+                    },
+                ),
+                "active": url.namespace == "plugins:pretix_dbvat",
+            }
+        ]
+    else:
+        return [
+            {
+                "label": _("DB Event-Offer"),
+                "icon": "train",
+                "url": reverse(
+                    "plugins:pretix_dbvat:settings",
+                    kwargs={
+                        "event": request.event.slug,
+                        "organizer": request.organizer.slug,
+                    },
+                ),
+                "active": url.namespace == "plugins:pretix_dbvat",
+            }
+        ]
 
 
 @receiver(item_forms, dispatch_uid="dbvat_item_forms")
@@ -101,14 +118,14 @@ def badges_logentry_display(sender, logentry, **kwargs):
 @receiver(signal=order_placed, dispatch_uid="dbvat_order_placed")
 @transaction.atomic()
 def order_placed_receiver(sender, order, **kwargs):
-    if sender.settings.dbvat_issue_on == "order_placed":
+    if sender.settings.dbvat_issue_on == "order_placed" and is_dbvar_event(sender):
         assign_coupons(sender, order, **kwargs)
 
 
 @receiver(signal=order_paid, dispatch_uid="dbvat_order_paid")
 @transaction.atomic()
 def order_paid_receiver(sender, order, **kwargs):
-    if sender.settings.dbvat_issue_on == "order_paid":
+    if sender.settings.dbvat_issue_on == "order_paid" and is_dbvar_event(sender):
         assign_coupons(sender, order, **kwargs)
 
 
@@ -172,32 +189,46 @@ def recv_layout_text_variables(sender, request=None, **kwargs):
 
 @receiver(order_info, dispatch_uid="dbvat_order_info")
 def order_info(sender: Event, order: Order, request, **kwargs):
-    if not DBVATCoupon.objects.filter(used_by__in=order.positions.all()).exists():
-        return ""
+    if is_dbvar_event(sender):
+        if not DBVATCoupon.objects.filter(used_by__in=order.positions.all()).exists():
+            return ""
 
-    template = get_template("pretix_dbvat/order_position_info.html")
-    ctx = {
-        "order": order,
-        "positions": order.positions.all(),
-        "event": sender,
-    }
-    return template.render(ctx, request)
+        template = get_template("pretix_dbvat/var/order_position_info.html")
+        ctx = {
+            "order": order,
+            "positions": order.positions.all(),
+            "event": sender,
+        }
+        return template.render(ctx, request)
+    else:
+        if not ItemDBVATConfig.objects.filter(item__in=order.positions.all().values_list('item'), issue_coupons=True).exists():
+            return ""
+
+        template = get_template("pretix_dbvat/vat/order_position_info.html")
+        return template.render(dbvat_url_context(request), request)
 
 
 @receiver(position_info, dispatch_uid="dbvat_position_info")
 def position_info(sender: Event, order: Order, position, request, **kwargs):
-    if not position.dbvat_coupons.exists():
-        return ""
+    if is_dbvar_event(sender):
+        if not position.dbvat_coupons.exists():
+            return ""
 
-    template = get_template("pretix_dbvat/order_position_info.html")
-    ctx = {
-        "order": order,
-        "positions": order.positions.filter(
-            Q(pk=position.pk) | Q(addon_to_id=position.pk)
-        ),
-        "event": sender,
-    }
-    return template.render(ctx, request)
+        template = get_template("pretix_dbvat/var/order_position_info.html")
+        ctx = {
+            "order": order,
+            "positions": order.positions.filter(
+                Q(pk=position.pk) | Q(addon_to_id=position.pk)
+            ),
+            "event": sender,
+        }
+        return template.render(ctx, request)
+    else:
+        if not hasattr(position.item, 'dbvat_coupons_item') or not position.item.dbvat_coupons_item.issue_coupons:
+            return ""
+
+        template = get_template("pretix_dbvat/vat/order_position_info.html")
+        return template.render(dbvat_url_context(request), request)
 
 
 @receiver(html_head, dispatch_uid="dbvat_html_head")
@@ -209,3 +240,4 @@ def html_head_presale(sender, request=None, **kwargs):
 settings_hierarkey.add_default("dbvat_source", "list", str)
 settings_hierarkey.add_default("dbvat_discount", 0, int)
 settings_hierarkey.add_default("dbvat_issue_on", "order_paid", str)
+settings_hierarkey.add_default("dbvat_event_id", None, int)

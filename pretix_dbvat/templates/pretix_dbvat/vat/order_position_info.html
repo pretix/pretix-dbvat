@@ -1,0 +1,40 @@
+{% load i18n %}
+{% load eventurl %}
+{% load bootstrap3 %}
+{% load static %}
+{% if dbvat_event_id %}
+    <div class="panel panel-dbred">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Always a good move: Travel by train to your event" %}
+            </h3>
+        </div>
+        <div class="panel-body">
+            <p>
+                {% blocktrans trimmed with event=request.event%}
+                    For <em>{{ event }}</em> participants exclusively: Travel comfortable, sustainable and affordable
+                    throughout Germany by train.
+                {% endblocktrans %}
+            </p>
+            <p>
+                {% blocktrans trimmed %}
+                    DB event offers provide you with several benefits:
+                {% endblocktrans %}
+                <ul>
+                    <li>{% trans "Attractive prices: low entry price from just EUR 16.19" %}</li>
+                    <li>{% trans "Flexible combination: apply additional BahnCard discount" %}</li>
+                    <li>
+                        {% trans "Sustainability guaranteed: arrival and departure on Deutsche Bahn trains using 100% renewable power" %}
+                    </li>
+                    <li>{% trans "Use your time effectively: work or relax on your journey" %}</li>
+                </ul>
+            </p>
+            <p>
+                {% blocktrans with "href='"|add:dbvat_url|add:"'"|safe as a_attr and "href='"|add:dbvat_tc_url|add:"'"|safe as tchref %}
+                    <a {{ a_attr }}>Book online now</a>, discover all DB event offers for your preferred route and secure
+                    your discounted ticket. <a {{ tchref }}>Terms and Conditions apply</a>.
+                {% endblocktrans %}
+            </p>
+        </div>
+    </div>
+{% endif %}

@@ -1,0 +1,39 @@
+{% extends "pretixcontrol/event/settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block inside %}
+    <h1>{% trans "DB Event-Offer" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            By cooperating with Deutsche Bahn (DB), you can make your events more sustainable and offer your
+            attendees at the same time a significant discount on their long distance train travel.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans trimmed with dbvatdiscount="https://www.bahn.de/eventangebote" dbvatsignup="https://www.veranstaltungsticket-bahn.de/mice/" %}
+            To get started, please visit <a href="{{ dbvatdiscount }}" target="_blank">{{ dbvatdiscount }}</a>
+            for more information and <a href="{{ dbvatsignup }}" target="_blank">sign up on the DB MICE portal</a>
+            to request your participation.
+        {% endblocktrans %}
+    </p>
+    <p>
+        {% blocktrans trimmed %}
+            Please remember, that you'll need to mark products that are eligible to receive the DB Event-Offer
+            explicitly by activating the corresponding checkbox within the product's "Additional Settings"-tab.
+        {% endblocktrans %}
+    </p>
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+        {% bootstrap_form_errors form %}
+        {% csrf_token %}
+        <fieldset>
+            <legend>{% trans "Settings" %}</legend>
+            {% bootstrap_form form layout="horizontal" %}
+        </fieldset>
+
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
