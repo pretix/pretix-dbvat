@@ -1,0 +1,52 @@
+{% load i18n %}
+{% load eventurl %}
+{% load bootstrap3 %}
+{% load static %}
+<div class="panel panel-dbred">
+    <div class="panel-heading">
+        <h3 class="panel-title">
+            {% trans "DB Event Discount" %}
+        </h3>
+    </div>
+    <div class="panel-body">
+        <p>
+            {% blocktrans trimmed with discount_percentage=event.settings.dbvat_discount %}
+                For a sustainable journey to our event, we're happy to provide you with an exclusive
+                {{ discount_percentage }}% event discount for long-distance travel on Deutsche Bahn.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans trimmed %}
+                Your personalized DB promotional vouchers for your outward and return journey are:
+            {% endblocktrans %}
+        </p>
+        <ul>
+            {% for position in positions %}
+                {% for coupon in position.dbvat_coupons.all %}
+                    <li>
+                        <code>{{ coupon.secret }}</code>
+                        <small>
+                            {% blocktrans trimmed with valid_from=coupon.valid_from valid_to=coupon.valid_to %}
+                                Valid for travel from {{ valid_from }} until {{ valid_to }}
+                            {% endblocktrans %}
+                        </small>
+                    </li>
+                {% endfor %}
+            {% endfor %}
+        </ul>
+        <p>
+            {% blocktrans trimmed with bahn="https://www.bahn.de/" navigator="https://www.bahn.de/service/mobile/db-navigator" %}
+                These eCoupons can be redeemed on when booking Flex-, SuperSpar- and Sparpreis tickets using
+                <a href="{{ bahn }}" target="_blank">www.bahn.de</a> or the
+                <a href="{{ navigator }}" target="_blank">DB Navigator apps</a>
+                using your personal account. Please make sure to book your outward and return journey separately, since
+                each eCoupon is only applied to the single most expensive ticket in your booking.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans trimmed with terms="https://www.bahn.de/veranstaltungsrabatt" %}
+                Terms and conditions apply, more information on <a href="{{ terms }}" target="_blank">{{ terms }}</a>.
+            {% endblocktrans %}
+        </p>
+    </div>
+</div>

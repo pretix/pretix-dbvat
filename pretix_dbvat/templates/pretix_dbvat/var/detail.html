@@ -1,0 +1,48 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load eventsignal %}
+{% load eventurl %}
+{% block title %}{% trans "DB VAT eCoupon" %}{% endblock %}
+{% block inside %}
+    <h1>{% trans "DB VAT eCoupon" %}</h1>
+    {% if secret.used %}
+        <div class="alert alert-warning">
+            {% trans "This eCoupon already has been used. It is not recommended to modify it." %}
+            → <a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=secret.used_by.order.code %}">
+                {{ secret.used_by.order.code }}-{{ secret.used_by.positionid }}
+            </a>
+        </div>
+    {% endif %}
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        <div class="row">
+            <div class="col-xs-12 col-lg-10">
+                <fieldset>
+                    {% bootstrap_field form.secret layout="control" %}
+                    {% bootstrap_field form.valid_from layout="control" %}
+                    {% bootstrap_field form.valid_to layout="control" %}
+                    {% if form.subevent %}
+                        {% bootstrap_field form.subevent layout="control" %}
+                    {% endif %}
+                </fieldset>
+            </div>
+            <div class="col-xs-12 col-lg-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">
+                            {% trans "History" %}
+                        </h3>
+                    </div>
+                    {% include "pretixcontrol/includes/logs.html" with obj=secret %}
+                </div>
+            </div>
+        </div>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
