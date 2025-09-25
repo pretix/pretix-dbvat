@@ -11,13 +11,13 @@ except ImportError:
 class PluginApp(PluginConfig):
     default = True
     name = "pretix_dbvat"
-    verbose_name = "DB Event Discount"
+    verbose_name = "DB Event Offers"
 
     class PretixPluginMeta:
-        name = gettext_lazy("DB Event Discount")
+        name = gettext_lazy("DB Event Offers")
         author = "pretix team"
         description = gettext_lazy(
-            "Distribute Deutsche Bahn Veranstaltungsrabatt (DB VAT) eCoupons to your attendees"
+            "Advertise the DB Event Offers for discounted and sustainable train travel to your attendees"
         )
         visible = True
         picture = "pretix_dbvat/db-logo.svg"

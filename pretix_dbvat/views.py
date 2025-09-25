@@ -6,14 +6,15 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import ListView
-from pretix.base.models import LogEntry
+from pretix.base.models import Event, LogEntry
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import CreateView, PaginationMixin, UpdateView
 from pretix.control.views.event import EventSettingsFormView, EventSettingsViewMixin
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.models import modelcopy
 
-from .forms import CouponBulkForm, CouponForm, SettingsForm
+from .forms import CouponBulkForm, CouponForm, VARSettingsForm, VATSettingsForm
+from .helpers import VARRequiredMixin
 from .models import DBVATCoupon
 
 logger = logging.getLogger(__name__)
@@ -24,12 +25,13 @@ class CouponListView(
     EventSettingsFormView,
     PaginationMixin,
     EventPermissionRequiredMixin,
+    VARRequiredMixin,
     ListView,
 ):
     model = DBVATCoupon
     context_object_name = "coupons"
-    form_class = SettingsForm
-    template_name = "pretix_dbvat/index.html"
+    form_class = VARSettingsForm
+    template_name = "pretix_dbvat/var/index.html"
     permission = "can_view_orders"
 
     def get_context_data(self, **kwargs):
@@ -60,9 +62,9 @@ class CouponListView(
         )
 
 
-class CouponDelete(EventPermissionRequiredMixin, CompatDeleteView):
+class CouponDelete(EventPermissionRequiredMixin, VARRequiredMixin, CompatDeleteView):
     model = DBVATCoupon
-    template_name = "pretix_dbvat/delete.html"
+    template_name = "pretix_dbvat/var/delete.html"
     permission = "can_change_orders"
     context_object_name = "secret"
 
@@ -109,9 +111,9 @@ class CouponDelete(EventPermissionRequiredMixin, CompatDeleteView):
         )
 
 
-class CouponUpdate(EventPermissionRequiredMixin, UpdateView):
+class CouponUpdate(EventPermissionRequiredMixin, VARRequiredMixin, UpdateView):
     model = DBVATCoupon
-    template_name = "pretix_dbvat/detail.html"
+    template_name = "pretix_dbvat/var/detail.html"
     permission = "can_change_orders"
     context_object_name = "secret"
     form_class = CouponForm
@@ -143,9 +145,9 @@ class CouponUpdate(EventPermissionRequiredMixin, UpdateView):
         )
 
 
-class CouponBulkCreate(EventPermissionRequiredMixin, CreateView):
+class CouponBulkCreate(EventPermissionRequiredMixin, VARRequiredMixin, CreateView):
     model = DBVATCoupon
-    template_name = "pretix_dbvat/bulk.html"
+    template_name = "pretix_dbvat/var/bulk.html"
     permission = "can_change_orders"
     form_class = CouponBulkForm
 
@@ -198,3 +200,19 @@ class CouponBulkCreate(EventPermissionRequiredMixin, CreateView):
         LogEntry.objects.bulk_create(log_entries)
         messages.success(self.request, _("The new coupon have been created."))
         return HttpResponseRedirect(self.get_success_url())
+
+
+class VATSettingsView(EventSettingsViewMixin, EventSettingsFormView):
+    model = Event
+    form_class = VATSettingsForm
+    template_name = "pretix_dbvat/vat/settings.html"
+    permission = "can_change_event_settings"
+
+    def get_success_url(self) -> str:
+        return reverse(
+            "plugins:pretix_dbvat:settings",
+            kwargs={
+                "organizer": self.request.event.organizer.slug,
+                "event": self.request.event.slug,
+            },
+        )

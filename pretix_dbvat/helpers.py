@@ -1,6 +1,11 @@
 from collections import Counter, defaultdict
+from django.contrib import messages
 from django.db import connection
 from django.db.models import Q
+from django.http import HttpRequest
+from django.shortcuts import redirect
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 from pretix.base.models import Event, Order
 from pretix.base.services import tickets
 from pretix.helpers import OF_SELF
@@ -55,3 +60,40 @@ def assign_coupons(event: Event, order: Order, **kwargs):
             coupon.save(update_fields=["used", "used_by"])
 
     tickets.invalidate_cache.apply(kwargs={"event": event.pk, "order": order.pk})
+
+
+def dbvat_url_context(request: HttpRequest):
+    dbvat_event_id = request.event.settings.dbvat_event_id
+    locale = "de" if request.LANGUAGE_CODE.startswith("de") else "en"
+
+    return {
+        "dbvat_url": f"https://www.veranstaltungsticket-bahn.de/?event={dbvat_event_id}&language={locale}",
+        "dbvat_event_id": dbvat_event_id,
+        "dbvat_tc_url": "http://www.bahn.de/eventangebote-teilnehmende",
+    }
+
+
+def is_dbvar_event(event: Event):
+    return DBVATCoupon.objects.filter(event=event).exists()
+
+
+class VARRequiredMixin:
+    def get(self, request, *args, **kwargs):
+        if is_dbvar_event(request.event):
+            return super().get(request, *args, **kwargs)
+        else:
+            messages.info(
+                request,
+                _(
+                    "The DB Event Discount has been discontinued and replaced by the DB Event Offers."
+                ),
+            )
+            return redirect(
+                reverse(
+                    "plugins:pretix_dbvat:settings",
+                    kwargs={
+                        "organizer": request.event.organizer.slug,
+                        "event": request.event.slug,
+                    },
+                )
+            )
