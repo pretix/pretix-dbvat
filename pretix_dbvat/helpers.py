@@ -85,7 +85,7 @@ class VARRequiredMixin:
             messages.info(
                 request,
                 _(
-                    "The DB Event Discount has been discontinued and replaced by the DB Event-Offers."
+                    "The DB Event Discount has been discontinued and replaced by the DB Event Offers."
                 ),
             )
             return redirect(

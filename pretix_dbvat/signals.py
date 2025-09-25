@@ -49,7 +49,7 @@ def navbar_info(sender, request, **kwargs):
     else:
         return [
             {
-                "label": _("DB Event-Offer"),
+                "label": _("DB Event Offer"),
                 "icon": "train",
                 "url": reverse(
                     "plugins:pretix_dbvat:settings",

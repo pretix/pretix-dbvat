@@ -167,7 +167,7 @@ class CouponBulkForm(CouponForm):
 
 class ItemDBVATConfigForm(forms.ModelForm):
     issue_coupons = forms.BooleanField(
-        label=pgettext_lazy("dbvat", "Item is eligible for DB Event-Offer"),
+        label=pgettext_lazy("dbvat", "Item is eligible for DB Event Offer"),
         required=False,
     )
 
@@ -197,7 +197,7 @@ class VATSettingsForm(SettingsForm):
     dbvat_event_id = forms.CharField(
         label=_("DB Event ID"),
         help_text=_(
-            "The ID of your event as displayed in the DB Event-Offers portal. If your URL is "
+            "The ID of your event as displayed in the DB Event Offers portal. If your URL is "
             "<code>https://www.veranstaltungsticket-bahn.de/?event=33148&language=de</code>, please enter "
             "<code>33148</code>."
         ),
